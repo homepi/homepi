@@ -1,0 +1,10 @@
+config.yml
+.DS_Store
+.idea
+/logs/*.log
+/db/data/*.db
+/public/uploads/avatars/*
+!/public/uploads/avatars/default.png
+server
+hpi
+.env
