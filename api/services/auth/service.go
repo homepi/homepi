@@ -27,28 +27,28 @@ type Service struct {
 
 func NewAuthService(db *gorm.DB) (*Service, error) {
 
-	accessTokenSecret := os.Getenv("ACCESS_TOKEN_SECRET")
+	accessTokenSecret := os.Getenv("HPI_ACCESS_TOKEN_SECRET")
 	if accessTokenSecret == "" {
-		return nil, fmt.Errorf("ACCESS_TOKEN_SECRET is required!")
+		return nil, fmt.Errorf("HPI_ACCESS_TOKEN_SECRET is required!")
 	}
 
 	var (
 		err                      error
 		accessTokenExpireTime    = 240
-		accessTokenExpireTimeStr = os.Getenv("ACCESS_TOKEN_EXPIRE_TIME")
+		accessTokenExpireTimeStr = os.Getenv("HPI_ACCESS_TOKEN_EXPIRE_TIME")
 	)
 
-	accessTokenExpireTimeStr = os.Getenv("ACCESS_TOKEN_EXPIRE_TIME")
+	accessTokenExpireTimeStr = os.Getenv("HPI_ACCESS_TOKEN_EXPIRE_TIME")
 	if accessTokenExpireTimeStr != "" {
 		accessTokenExpireTime, err = strconv.Atoi(accessTokenExpireTimeStr)
 		if err != nil {
-			return nil, fmt.Errorf("ACCESS_TOKEN_EXPIRE_TIME is required or should be a number!")
+			return nil, fmt.Errorf("HPI_ACCESS_TOKEN_EXPIRE_TIME is required or should be a number!")
 		}
 	}
 
-	refreshTokenSecret := os.Getenv("REFRESH_TOKEN_SECRET")
+	refreshTokenSecret := os.Getenv("HPI_REFRESH_TOKEN_SECRET")
 	if refreshTokenSecret == "" {
-		return nil, fmt.Errorf("REFRESH_TOKEN_SECRET is required!")
+		return nil, fmt.Errorf("HPI_REFRESH_TOKEN_SECRET is required!")
 	}
 
 	var (

@@ -20,12 +20,6 @@ FROM alpine AS app
 
 COPY --from=builder /code/homepi /usr/bin/homepi
 
-RUN mkdir -p /db/data
-
-ENV SQLITE3_PATH /db/data/homepi.db
-
-RUN /usr/bin/homepi init
-
 EXPOSE 55283
 
 ENTRYPOINT ["/usr/bin/homepi"]

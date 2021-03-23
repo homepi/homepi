@@ -22,19 +22,19 @@ This project works with an android app that you can find here https://github.com
 ### Environment variables
 #### Required environment variables
 ```env
-SQLITE3_PATH=path/to/homepi.db
-ACCESS_TOKEN_SECRET=random-jwt-secret-access-token
-REFRESH_TOKEN_SECRET=random-jwt-secret-refresh-token
+HPI_SQLITE3_PATH=path/to/homepi.db
+HPI_ACCESS_TOKEN_SECRET=random-jwt-secret-access-token
+HPI_REFRESH_TOKEN_SECRET=random-jwt-secret-refresh-token
 ```
 #### Optional environment variables
 ```env
-ACCESS_TOKEN_EXPIRE_TIME=240 # a duration that an access_token could be valid (default "240 minutes")
-REFRESH_TOKEN_EXPIRE_TIME=1440 # a duration that an refresh_token could be valid (default "1440 minutes")
+HPI_ACCESS_TOKEN_EXPIRE_TIME=240 # a duration that an access_token could be valid (default "240 minutes")
+HPI_REFRESH_TOKEN_EXPIRE_TIME=1440 # a duration that an refresh_token could be valid (default "1440 minutes")
 ```
 
 ## Run the docker image
 ```bash
-$ docker run --restart always --device /dev/ttyAMA0:/dev/ttyAMA0 --device /dev/mem:/dev/mem --volume ./db/data:/code/db/data --privileged -dp 55283:55283 homepi/api
+$ docker run --restart always --device /dev/ttyAMA0:/dev/ttyAMA0 --device /dev/mem:/dev/mem --volume ./db/data:/code/db/data --privileged -dp 55283:55283 homepi/homepi
 ```
 
 ## docker-compose example
@@ -48,11 +48,11 @@ services:
     ports:
       - 55283:55283
     environment:
-      - SQLITE3_PATH: "/db/data/homepi.db"
-      - ACCESS_TOKEN_SECRET: "random-jwt-secret-access-token"
-      - REFRESH_TOKEN_SECRET: "random-jwt-secret-refresh-token"
-      - ACCESS_TOKEN_EXPIRE_TIME: "240"
-      - REFRESH_TOKEN_EXPIRE_TIME: "1440"
+      HPI_SQLITE3_PATH: "/db/data/homepi.db"
+      HPI_ACCESS_TOKEN_SECRET: "random-jwt-secret-access-token"
+      HPI_REFRESH_TOKEN_SECRET: "random-jwt-secret-refresh-token"
+      HPI_ACCESS_TOKEN_EXPIRE_TIME: "240"
+      HPI_REFRESH_TOKEN_EXPIRE_TIME: "1440"
     restart: always
     devices:
       - /dev/ttyAMA0:/dev/ttyAMA0

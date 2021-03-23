@@ -17,7 +17,7 @@ func NewInitCommand() *cobra.Command {
 		Short: "Initialize homepi",
 		Long: "Initialize homepi\n\n" +
 			"Required environment variables\n" +
-			"SQLITE3_PATH is for sqlite3 database file path\n",
+			"HPI_SQLITE3_PATH is for sqlite3 database file path\n",
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			if db, ok := cmd.Context().Value("db").(*gorm.DB); ok {

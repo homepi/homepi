@@ -28,9 +28,10 @@ func main() {
 	rootCmd.AddCommand(cmds.NewApiServerCommand())
 	rootCmd.AddCommand(cmds.NewInitCommand())
 	rootCmd.AddCommand(cmds.NewUserCommand())
-	dbPath := os.Getenv("SQLITE3_PATH")
+	dbPath := os.Getenv("HPI_SQLITE3_PATH")
 	if dbPath == "" {
-		dbPath = "./homepi.db"
+		fmt.Fprintln(os.Stderr, "HPI_SQLITE3_PATH is required!")
+		os.Exit(1)
 	}
 	database, err := gorm.Open(sqlite.Open(dbPath), nil)
 	if err != nil {
