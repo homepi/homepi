@@ -28,12 +28,12 @@ func NewApiServerCommand() *cobra.Command {
 		Short: "Run api server",
 		Long: "Runs fortress api server\n\n" +
 			"Required environment variables\n" +
-			"SQLITE3_PATH is for sqlite3 database file path\n" +
-			"ACCESS_TOKEN_SECRET is for jwt access token\n" +
-			"REFRESH_TOKEN_SECRET is for jwt refresh token\n\n" +
+			"HPI_SQLITE3_PATH is for sqlite3 database file path\n" +
+			"HPI_ACCESS_TOKEN_SECRET is for jwt access token\n" +
+			"HPI_REFRESH_TOKEN_SECRET is for jwt refresh token\n\n" +
 			"Optional environment variables\n" +
-			"ACCESS_TOKEN_EXPIRE_TIME is a duration that an access_token could be valid (default \"240 minutes\")\n" +
-			"REFRESH_TOKEN_EXPIRE_TIME is a duration that an refresh_token could be valid (default \"1440 minutes\")\n",
+			"HPI_ACCESS_TOKEN_EXPIRE_TIME is a duration that an access_token could be valid (default \"240 minutes\")\n" +
+			"HPI_REFRESH_TOKEN_EXPIRE_TIME is a duration that an refresh_token could be valid (default \"1440 minutes\")\n",
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			fmt.Fprintln(cmd.OutOrStdout(), cmd.Root().Long+"\n")
