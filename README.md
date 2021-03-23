@@ -9,7 +9,7 @@
 
 ## About HomePi
 HomePI (SmartHome) is a web api application that works with raspberry pi and relay boards to control GPIO pins!
-This project works with an android app that you can find here https://github.com/HomePi/android-project
+This project works with an android app that you can find here https://github.com/HomePi/AndroidKotlin
 
 <a target="_blank" href="https://documenter.getpostman.com/view/471191/SVtbQR4D?version=latest">
   <img src="https://img.shields.io/badge/Postman-api%20documentation-orange?logo=postman&style=for-the-badge" alt="Postman API Documentation">
