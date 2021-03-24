@@ -1,10 +1,10 @@
-```
-    __  __                     ____  _
-   / / / /___  ________  ___  / __ \(_)
-  / /_/ / __ \/ __  __ \/ _ \/ /_/ / /
- / __  / /_/ / / / / / /  __/ ____/ /
+<pre align="center">
+      __  __                     ____  _
+      / / / /___  ________  ___  / __ \(_)
+    / /_/ / __ \/ __  __ \/ _ \/ /_/ / /
+  / __  / /_/ / / / / / /  __/ ____/ /
 /_/ /_/\____/_/ /_/ /_/\___/_/   /_/
-```
+</pre>
 ### This project is under construction.
 
 ## About HomePi
@@ -43,8 +43,8 @@ version: '3'
 
 services:
   api:
-    container_name: homepi_api
-    image: homepi/api
+    container_name: homepi
+    image: homepi/homepi
     ports:
       - 55283:55283
     environment:
