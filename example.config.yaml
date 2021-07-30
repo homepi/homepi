@@ -1,0 +1,18 @@
+env: development
+#env: production
+timezone: Asia/Tehran
+
+ignoreArchWarning: true
+
+database:
+  driver: "sqlite"
+  path: "./db/data/homepi.db"
+
+jwt:
+  access_token:
+    secret: "super-secure-jwt-access-token"
+    expires_at: 240
+  refresh_token:
+    secret: "super-secure-jwt-refresh-token"
+    expires_at: 1440
+
