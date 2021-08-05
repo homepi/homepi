@@ -20,11 +20,18 @@ func HandleHostInfo(ctx *core.Context) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
-			hostname, err := os.Hostname()
-			if err != nil {
-				hostname = "localhost"
+			var (
+				err      error
+				hostname = ctx.Config.Hostname
+			)
+			if hostname == "" {
+				hostname, err = os.Hostname()
+				if err != nil {
+					hostname = "127.0.0.1"
+				}
 			}
-			baseURI := fmt.Sprintf("http://%s:55283", hostname)
+			port := ctx.Config.Port
+			baseURI := fmt.Sprintf("http://%s:%d", hostname, port)
 			respond.NewWithWriter(w).Succeed(&ManifestType{
 				Version:        "v1",
 				BaseURI:        baseURI,

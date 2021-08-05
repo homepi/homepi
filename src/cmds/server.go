@@ -48,6 +48,8 @@ func apiServerCommand() *cobra.Command {
 				return err
 			}
 
+			cfg.Port = cFlags.Port
+
 			logrus.SetFormatter(&logrus.TextFormatter{})
 			if cfg.Environment == "production" {
 				logrus.SetFormatter(&logrus.JSONFormatter{})

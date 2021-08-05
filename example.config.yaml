@@ -3,10 +3,11 @@ env: development
 timezone: Asia/Tehran
 
 ignoreArchWarning: true
+hostname: "{you-server-ip}"
 
 database:
   driver: "sqlite"
-  path: "./db/data/homepi.db"
+  path: "data/homepi.db"
 
 jwt:
   access_token:
