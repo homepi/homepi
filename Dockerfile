@@ -1,4 +1,4 @@
-FROM golang:1.15-alpine AS builder
+FROM golang:1.16-alpine AS builder
 
 LABEL maintainer="Alireza Josheghani <josheghani.dev@gmail.com>"
 
@@ -21,6 +21,8 @@ FROM alpine AS app
 COPY --from=builder /code/homepi /usr/bin/homepi
 
 EXPOSE 55283
+
+#ENV HPI_ENVIRONMENT production
 
 ENTRYPOINT ["/usr/bin/homepi"]
 CMD ["server", "--host", "0.0.0.0", "--port", "55283"]

@@ -1,2 +1,5 @@
-homepi.db
-
+cert
+bin
+dist
+data
+config.yaml

@@ -23,13 +23,13 @@ This project works with an android app that you can find here https://github.com
 #### Required environment variables
 ```env
 HPI_SQLITE3_PATH=path/to/homepi.db
-HPI_ACCESS_TOKEN_SECRET=random-jwt-secret-access-token
-HPI_REFRESH_TOKEN_SECRET=random-jwt-secret-refresh-token
+HPI_JWT_ACCESS_TOKEN=random-jwt-secret-access-token
+HPI_JWT_REFRESH_TOKEN=random-jwt-secret-refresh-token
 ```
 #### Optional environment variables
 ```env
-HPI_ACCESS_TOKEN_EXPIRE_TIME=240 # a duration that an access_token could be valid (default "240 minutes")
-HPI_REFRESH_TOKEN_EXPIRE_TIME=1440 # a duration that an refresh_token could be valid (default "1440 minutes")
+HPI_JWT_ACCESS_TOKEN_EXPIRES_AT=240 # a duration that an access_token could be valid (default "240 minutes")
+HPI_JWT_REFRESH_TOKEN_EXPIRES_AT=1440 # a duration that an refresh_token could be valid (default "1440 minutes")
 ```
 
 ## Run the docker image
@@ -48,11 +48,12 @@ services:
     ports:
       - 55283:55283
     environment:
-      HPI_SQLITE3_PATH: "/db/data/homepi.db"
-      HPI_ACCESS_TOKEN_SECRET: "random-jwt-secret-access-token"
-      HPI_REFRESH_TOKEN_SECRET: "random-jwt-secret-refresh-token"
-      HPI_ACCESS_TOKEN_EXPIRE_TIME: "240"
-      HPI_REFRESH_TOKEN_EXPIRE_TIME: "1440"
+      HPI_DB_DRIVER: "sqlite"
+      HPI_DB_PATH: "/db/data/homepi.db"
+      HPI_JWT_ACCESS_TOKEN: "random-jwt-secret-access-token"
+      HPI_JWT_REFRESH_TOKEN: "random-jwt-secret-refresh-token"
+      HPI_JWT_ACCESS_TOKEN_EXPIRES_AT: "240"
+      HPI_JWT_REFRESH_TOKEN_EXPIRES_AT: "1440"
     restart: always
     devices:
       - /dev/ttyAMA0:/dev/ttyAMA0
