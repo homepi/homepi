@@ -4,6 +4,7 @@ export GOBIN?=$(BIN)
 export GO=$(shell which go)
 export BUILD=cd $(ROOT) && $(GO) install -v -ldflags "-s"
 export CGO_ENABLED=1
+export GOX=$(BIN)/gox
 
 # Linter configurations
 export LINTER=$(GOBIN)/golangci-lint
@@ -70,15 +71,12 @@ test:
 	@$(GO) test ./src/... -v -race
 
 install-gox:
-	@$(GO) get -v github.com/mitchellh/gox@v1.0.1
+	@$(GO) install github.com/mitchellh/gox@v1.0.1
 
 .PHONY: build-linux
 build-linux: install-gox
 	@$(GOX) --arch=amd64 --os=linux --output="dist/homepi_{{.OS}}_{{.Arch}}"
-
-.PHONY: build-windows
-build-windows: install-gox
-	@$(GOX) --arch=amd64 --os=windows --output="dist/homepi_{{.OS}}_{{.Arch}}"
+	@$(GOX) --arch=arm --os=linux --output="dist/homepi_{{.OS}}_{{.Arch}}"
 
 .PHONY: build-macOS
 build-macOS: install-gox
@@ -86,4 +84,4 @@ build-macOS: install-gox
 
 .PHONY: build-artifacts
 build-artifacts:
-	@$(MAKE) build-linux && $(MAKE) build-windows && $(MAKE) build-macOS
+	@$(MAKE) build-linux && $(MAKE) build-macOS

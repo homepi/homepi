@@ -49,18 +49,18 @@ jobs:
         path: ./dist/homepi_darwin_amd64
         retention-days: 1
 
-    - name: 'Upload linux artifact'
+    - name: 'Upload linux/amd64 artifact'
       uses: actions/upload-artifact@v2
       with:
         name: homepi_linux_amd64
         path: ./dist/homepi_linux_amd64
         retention-days: 1
 
-    - name: 'Upload windows artifact'
+    - name: 'Upload linux/arm artifact'
       uses: actions/upload-artifact@v2
       with:
-        name: homepi_windows_amd64
-        path: ./dist/homepi_windows_amd64.exe
+        name: homepi_linux_arm
+        path: ./dist/homepi_linux_arm
         retention-days: 1
 
   publish:
@@ -84,18 +84,22 @@ jobs:
         run: |
           TAG_NAME=${{ github.ref }}
           echo "TAG_NAME=${TAG_NAME#refs/*/}" >> $GITHUB_ENV
-      - name: Generate Linux64 SHA256 checksums
+
+      - name: Generate Linux-64 SHA256 checksums
         run: |
           sha256sum homepi_linux_amd64/homepi_linux_amd64 > homepi_linux_amd64.sha256sum
           echo "SHA_LINUX_64=$(cat homepi_linux_amd64.sha256sum)" >> $GITHUB_ENV
+
       - name: Generate macOS SHA256 checksums
         run: |
           sha256sum homepi_darwin_amd64/homepi_darwin_amd64 > homepi_darwin_amd64.sha256sum
           echo "SHA_MACOS=$(cat homepi_darwin_amd64.sha256sum)" >> $GITHUB_ENV
-      - name: Generate windows SHA256 checksums
+
+      - name: Generate Linux-ARM SHA256 checksums
         run: |
-          sha256sum homepi_windows_amd64/homepi_windows_amd64.exe > homepi_windows_amd64.sha256sum
-          echo "SHA_WIN_64=$(cat homepi_windows_amd64.sha256sum)" >> $GITHUB_ENV
+          sha256sum homepi_linux_arm/homepi_linux_arm > homepi_linux_arm.sha256sum
+          echo "SHA_LINUX_ARM_64=$(cat homepi_linux_arm.sha256sum)" >> $GITHUB_ENV
+
       - if: env.TAG_NAME == 'develop'
         run: echo 'SUBJECT=HomePi development (prerelease) build' >> $GITHUB_ENV
 
@@ -116,8 +120,8 @@ jobs:
             homepi_darwin_amd64.sha256sum:./homepi_darwin_amd64.sha256sum
             homepi_linux_amd64:./homepi_linux_amd64/homepi_linux_amd64
             homepi_linux_amd64.sha256sum:./homepi_linux_amd64.sha256sum
-            homepi_windows_amd64.exe:./homepi_windows_amd64/homepi_windows_amd64.exe
-            homepi_windows_amd64.exe.sha256sum:./homepi_windows_amd64.sha256sum
+            homepi_linux_arm:./homepi_linux_arm/homepi_linux_arm
+            homepi_linux_arm.sha256sum:./homepi_linux_arm.sha256sum
           body: |
             ${{ env.SUBJECT }}
             ```
@@ -129,12 +133,12 @@ jobs:
             ### Linux (x64)
             1. Download **homepi_linux_amd64**
             2. Run `./homepi_linux_amd64`
-            ### Windows (x64)
-            1. Download **homepi_windows_amd64.exe**
-            2. Run `./homepi_windows_amd64.exe`
+            ### Linux (ARM)
+            1. Download **homepi_linux_arm**
+            2. Run `./homepi_linux_arm`
             ## SHA256 Checksums
             ```
             ${{ env.SHA_LINUX_64 }}
             ${{ env.SHA_MACOS }}
-            ${{ env.SHA_WIN_64 }}
+            ${{ env.SHA_LINUX_ARM }}
             ```
