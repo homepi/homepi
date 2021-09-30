@@ -42,6 +42,7 @@ jobs:
         make build-artifacts
         printf '::set-output name=version::%s\n' "$(./dist/homepi_linux_amd64 version | head -n 3)"
         printf '::set-output name=release::%s\n' "$(./dist/homepi_linux_amd64 version | head -n 1)"
+
     - name: 'Upload macOS artifact'
       uses: actions/upload-artifact@v2
       with:
@@ -98,7 +99,7 @@ jobs:
       - name: Generate Linux-ARM SHA256 checksums
         run: |
           sha256sum homepi_linux_arm/homepi_linux_arm > homepi_linux_arm.sha256sum
-          echo "SHA_LINUX_ARM_64=$(cat homepi_linux_arm.sha256sum)" >> $GITHUB_ENV
+          echo "SHA_LINUX_ARM=$(cat homepi_linux_arm.sha256sum)" >> $GITHUB_ENV
 
       - if: env.TAG_NAME == 'develop'
         run: echo 'SUBJECT=HomePi development (prerelease) build' >> $GITHUB_ENV
