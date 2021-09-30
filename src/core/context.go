@@ -131,6 +131,7 @@ func (ctx *Context) CheckAPIToken(token string) (*models.User, bool, error) {
 }
 
 func (ctx *Context) DecodeAuthToken(token string) (*models.User, bool, error) {
+
 	// now, check that it matches what's in the auth token claims
 	authToken, err := jwt.ParseWithClaims(token, &jwt.StandardClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(ctx.Config.JWT.AccessToken.Value), nil

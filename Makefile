@@ -34,10 +34,12 @@ export LINTERCMD=run --no-config -v \
 all:
 	$(BUILD) ./...
 
+.PHONY: server
 server: all
 	$(ROOT)/bin/homepi server --config-file=$(ROOT)/config.yaml
 
 # lint runs vet plus a number of other checkers, it is more comprehensive, but louder
+.PHONY: lint
 lint:
 	@LINTER_BIN=$$(command -v $(LINTER)) || { echo "golangci-lint command not found! Installing..." && $(MAKE) install-metalinter; };
 	@$(GO) list -f '{{.Dir}}' ./src/... | grep -v /vendor/ \
@@ -47,20 +49,22 @@ lint:
 			echo "and fix them if necessary before submitting the code for reviewal."; \
 		fi
 
+.PHONY: gox
 gox:
 	@gox -output="dist/homepi_{{.OS}}_{{.Arch}}"
 
 # for ci jobs, runs lint against the changed packages in the commit
+.PHONY: ci-lint
 ci-lint:
-	$(shell which golangci-lint) $(LINTERCMD) --deadline 10m \
-		--new-from-rev=HEAD~ \
-		./...
+	$(shell which golangci-lint) $(LINTERCMD) --deadline 10m ./...
 
 # Check if golangci-lint not exists, then install it
+.PHONY: install-metalinter
 install-metalinter:
 	$(GO) get -v github.com/golangci/golangci-lint/cmd/golangci-lint@v1.41.1
 	$(GO) install -v github.com/golangci/golangci-lint/cmd/golangci-lint@v1.41.1
 
 # Run tests
+.PHONY: test
 test:
 	@$(GO) test ./src/... -v -race

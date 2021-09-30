@@ -44,6 +44,7 @@ func createAuthToken(ctx *core.Context, user *models.User) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("could not SignedString token: %v", err)
 	}
+
 	return []byte(token), nil
 }
 
