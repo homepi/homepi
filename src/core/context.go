@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 
@@ -137,6 +138,8 @@ func (ctx *Context) DecodeAuthToken(token string) (*models.User, bool, error) {
 		return []byte(ctx.Config.JWT.AccessToken.Value), nil
 	})
 	if err != nil {
+		log.Println(err)
+		log.Println(token)
 		return nil, false, fmt.Errorf("could not parse jwt.Token with Claims: %v", err)
 	}
 	if authToken == nil || authToken.Claims == nil {

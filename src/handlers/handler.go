@@ -2,7 +2,9 @@ package handlers
 
 import (
 	"fmt"
+	"io"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/go-chi/chi"
@@ -51,6 +53,22 @@ func handler(core *core.Context) http.Handler {
 	// processing should be stopped.
 	mux.Use(middleware.Timeout(20 * time.Second))
 
+	mux.Handle("/uploads/avatars/{avatar}.png", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		avatarID := chi.URLParam(r, "avatar")
+		avatarFile, err := os.Open(fmt.Sprintf("./uploads/avatars/%s.png", avatarID))
+		if err != nil {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+
+		if _, err := io.Copy(w, avatarFile); err != nil {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+
+	}))
+
 	mux.Route("/api", func(r chi.Router) {
 
 		// Prints api details
@@ -83,6 +101,7 @@ func handler(core *core.Context) http.Handler {
 			})
 
 		})
+
 	})
 
 	return mux

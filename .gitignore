@@ -3,3 +3,4 @@ bin
 dist
 data
 config.yaml
+homepi.db
