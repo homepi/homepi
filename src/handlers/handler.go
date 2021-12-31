@@ -47,6 +47,7 @@ func handler(core *core.Context) http.Handler {
 	mux.Use(middleware.Recoverer)
 	mux.Use(wrapJSONHandler)
 	mux.Use(wrapCORSHandler(core))
+	mux.Use(wrapAllowedHosts(core))
 
 	// Set a timeout value on the request context (ctx), that will signal
 	// through ctx.Done() that the request has timed out and further
@@ -56,7 +57,7 @@ func handler(core *core.Context) http.Handler {
 	mux.Handle("/uploads/avatars/{avatar}.png", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		avatarID := chi.URLParam(r, "avatar")
-		avatarFile, err := os.Open(fmt.Sprintf("./uploads/avatars/%s.png", avatarID))
+		avatarFile, err := os.Open(fmt.Sprintf("%s/uploads/avatars/%s.png", core.Config.StorageDIR, avatarID))
 		if err != nil {
 			w.WriteHeader(http.StatusNotFound)
 			return

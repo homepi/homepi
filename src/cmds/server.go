@@ -3,6 +3,7 @@ package cmds
 import (
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"runtime"
@@ -21,6 +22,8 @@ type ServerFlags struct {
 	ConfigFile        string
 	LogOutputFilename string
 	NoTLS             bool
+	TLSCertFile       string
+	TLSKeyFile        string
 }
 
 func apiServerCommand() *cobra.Command {
@@ -86,14 +89,25 @@ func apiServerCommand() *cobra.Command {
 				IdleTimeout:       5 * time.Minute,
 			}
 
+			protocol := "http"
+			if !cFlags.NoTLS {
+				protocol = "https"
+			}
+
 			logrus.WithFields(logrus.Fields{
-				"addr": fmt.Sprintf("%s://%s:%d", "http", cFlags.Host, cFlags.Port),
+				"addr": fmt.Sprintf("%s://%s:%d", protocol, cFlags.Host, cFlags.Port),
 			}).Infof("HomePi server is up and running")
 
 			if !cFlags.NoTLS {
-				if err := server.ListenAndServeTLS("cert/public.crt", "cert/private.key"); err != nil {
+
+				if cFlags.TLSCertFile == "" || cFlags.TLSKeyFile == "" {
+					log.Fatal("You must provide CertFile and KeyFile for TLS option, Usage: --tls-cert-file {path} --tls-key-file {path}")
+				}
+
+				if err := server.ListenAndServeTLS(cFlags.TLSCertFile, cFlags.TLSKeyFile); err != nil {
 					return fmt.Errorf("could not serve TLS router: %v", err)
 				}
+
 			} else {
 				if err := server.ListenAndServe(); err != nil {
 					return fmt.Errorf("could not serve router: %v", err)
@@ -110,5 +124,7 @@ func apiServerCommand() *cobra.Command {
 	cmd.PersistentFlags().StringVarP(&cFlags.ConfigFile, "config-file", "c", "", "Server config file")
 	cmd.PersistentFlags().StringVar(&cFlags.LogOutputFilename, "log-file", "", "Log output filename")
 	cmd.PersistentFlags().BoolVar(&cFlags.NoTLS, "no-tls", true, "Start server without tls enabled")
+	cmd.PersistentFlags().StringVar(&cFlags.TLSCertFile, "tls-cert-file", "", "TLS Certificate file")
+	cmd.PersistentFlags().StringVar(&cFlags.TLSKeyFile, "tls-key-file", "", "TLS Key file")
 	return cmd
 }

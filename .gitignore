@@ -4,3 +4,4 @@ dist
 data
 config.yaml
 homepi.db
+certs

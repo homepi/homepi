@@ -5,9 +5,15 @@ timezone: Asia/Tehran
 ignoreArchWarning: true
 hostname: "{you-server-ip}"
 
+storage_dir: /storage
+
 database:
   driver: "sqlite"
   path: "data/homepi.db"
+
+allowed_hosts:
+  - 127.0.0.1
+  - localhost
 
 jwt:
   access_token:
@@ -16,4 +22,3 @@ jwt:
   refresh_token:
     secret: "super-secure-jwt-refresh-token"
     expires_at: 1440
-
