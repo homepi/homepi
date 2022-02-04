@@ -37,8 +37,7 @@ type (
 		} `yaml:"access_token"`
 
 		RefreshToken struct {
-			Value     string `env:"HPI_JWT_REFRESH_TOKEN,default=super-secure-refresh-token" yaml:"secret"`
-			ExpiresAt int    `env:"HPI_JWT_REFRESH_TOKEN_EXPIRES_AT,default=1440" yaml:"expires_at"`
+			Value string `env:"HPI_JWT_REFRESH_TOKEN,default=super-secure-refresh-token" yaml:"secret"`
 		} `yaml:"refresh_token"`
 	}
 )

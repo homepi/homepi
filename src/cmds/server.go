@@ -21,7 +21,7 @@ type ServerFlags struct {
 	IgnoreArch        bool
 	ConfigFile        string
 	LogOutputFilename string
-	NoTLS             bool
+	TLS               bool
 	TLSCertFile       string
 	TLSKeyFile        string
 }
@@ -90,7 +90,7 @@ func apiServerCommand() *cobra.Command {
 			}
 
 			protocol := "http"
-			if !cFlags.NoTLS {
+			if cFlags.TLS {
 				protocol = "https"
 			}
 
@@ -98,7 +98,7 @@ func apiServerCommand() *cobra.Command {
 				"addr": fmt.Sprintf("%s://%s:%d", protocol, cFlags.Host, cFlags.Port),
 			}).Infof("HomePi server is up and running")
 
-			if !cFlags.NoTLS {
+			if cFlags.TLS {
 
 				if cFlags.TLSCertFile == "" || cFlags.TLSKeyFile == "" {
 					log.Fatal("You must provide CertFile and KeyFile for TLS option, Usage: --tls-cert-file {path} --tls-key-file {path}")
@@ -123,7 +123,7 @@ func apiServerCommand() *cobra.Command {
 	cmd.PersistentFlags().BoolVar(&cFlags.IgnoreArch, "ignore-arch", false, "Ignore arch error")
 	cmd.PersistentFlags().StringVarP(&cFlags.ConfigFile, "config-file", "c", "", "Server config file")
 	cmd.PersistentFlags().StringVar(&cFlags.LogOutputFilename, "log-file", "", "Log output filename")
-	cmd.PersistentFlags().BoolVar(&cFlags.NoTLS, "no-tls", true, "Start server without tls enabled")
+	cmd.PersistentFlags().BoolVar(&cFlags.TLS, "no-tls", false, "Start server without tls enabled")
 	cmd.PersistentFlags().StringVar(&cFlags.TLSCertFile, "tls-cert-file", "", "TLS Certificate file")
 	cmd.PersistentFlags().StringVar(&cFlags.TLSKeyFile, "tls-key-file", "", "TLS Key file")
 	return cmd

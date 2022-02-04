@@ -21,4 +21,3 @@ jwt:
     expires_at: 240
   refresh_token:
     secret: "super-secure-jwt-refresh-token"
-    expires_at: 1440

@@ -82,7 +82,6 @@ func handler(core *core.Context) http.Handler {
 			r.Handle("/users.json", userHandler.HandleListUsers(core))
 			r.Handle("/roles.json", userHandler.HandleListRoles(core))
 			r.Handle("/pins.json", accessoryHandler.HandleListGPIOPins(core))
-			r.Handle("/health.json", systemHandler.HandleGetHealth(core))
 
 			r.Route("/users", func(r chi.Router) {
 				r.Handle("/me.json", userHandler.HandleUsersMe(core))

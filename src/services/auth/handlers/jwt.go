@@ -63,13 +63,13 @@ func createRefreshToken(ctx *core.Context, user *models.User) ([]byte, error) {
 		return nil, err
 	}
 
-	refreshTokenExp := time.Now().Add(time.Minute * time.Duration(ctx.Config.JWT.RefreshToken.ExpiresAt)).Unix()
+	//refreshTokenExp := time.Now().Add(time.Minute * time.Duration(ctx.Config.JWT.RefreshToken.ExpiresAt)).Unix()
 
 	// create a signer for rsa 256
 	refreshJwt := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
-		Id:        token.TokenID,
-		Subject:   fmt.Sprint(user.ID),
-		ExpiresAt: refreshTokenExp,
+		Id:      token.TokenID,
+		Subject: fmt.Sprint(user.ID),
+		//ExpiresAt: refreshTokenExp,
 	})
 
 	// generate the refresh token string
@@ -135,14 +135,11 @@ func refreshToken(ctx *core.Context, refreshTokenString string) ([]byte, []byte,
 		return nil, nil, errors.New("refresh token is not valid")
 	}
 
-	if refreshToken.Valid {
-		if err = deleteRefreshToken(ctx, refreshTokenClaims.Id); err != nil {
-			return nil, nil, fmt.Errorf("could not delete refresh token: %v", err)
-		}
-		return CreateNewTokens(ctx, dbRefreshedToken.User)
+	if err = deleteRefreshToken(ctx, refreshTokenClaims.Id); err != nil {
+		return nil, nil, fmt.Errorf("could not delete refresh token: %v", err)
 	}
 
-	return nil, nil, errors.New("unauthorized")
+	return CreateNewTokens(ctx, dbRefreshedToken.User)
 }
 
 func deleteRefreshToken(ctx *core.Context, jti string) (err error) {
