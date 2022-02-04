@@ -70,7 +70,6 @@ jwt:
 		assert.Equal(t, cfg.JWT.AccessToken.Value, "super-secure-jwt-access-token")
 		assert.Equal(t, cfg.JWT.RefreshToken.Value, "super-secure-jwt-refresh-token")
 		assert.Equal(t, cfg.JWT.AccessToken.ExpiresAt, 240)
-		assert.Equal(t, cfg.JWT.RefreshToken.ExpiresAt, 1440)
 
 	})
 

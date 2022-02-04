@@ -3,7 +3,6 @@ package handlers
 import (
 	"fmt"
 	"net/http"
-	"os"
 
 	"github.com/homepi/homepi/src/core"
 	"github.com/mrjosh/respond.go"
@@ -20,18 +19,13 @@ func HandleHostInfo(ctx *core.Context) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
-			var (
-				err      error
-				hostname = ctx.Config.Hostname
-			)
-			if hostname == "" {
-				hostname, err = os.Hostname()
-				if err != nil {
-					hostname = "127.0.0.1"
-				}
+
+			scheme := "http"
+			if r.TLS != nil {
+				scheme = "https"
 			}
-			port := ctx.Config.Port
-			baseURI := fmt.Sprintf("http://%s:%d", hostname, port)
+
+			baseURI := fmt.Sprintf("%s://%s", scheme, r.Host)
 			respond.NewWithWriter(w).Succeed(&ManifestType{
 				Version:        "v1",
 				BaseURI:        baseURI,
@@ -39,6 +33,7 @@ func HandleHostInfo(ctx *core.Context) http.Handler {
 				APIBaseURI:     "/api/v1",
 			})
 			return
+
 		default:
 			respond.NewWithWriter(w).MethodNotAllowed()
 		}

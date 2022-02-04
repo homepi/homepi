@@ -2,7 +2,9 @@ package handlers
 
 import (
 	"fmt"
+	"io"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/go-chi/chi"
@@ -45,11 +47,28 @@ func handler(core *core.Context) http.Handler {
 	mux.Use(middleware.Recoverer)
 	mux.Use(wrapJSONHandler)
 	mux.Use(wrapCORSHandler(core))
+	mux.Use(wrapAllowedHosts(core))
 
 	// Set a timeout value on the request context (ctx), that will signal
 	// through ctx.Done() that the request has timed out and further
 	// processing should be stopped.
 	mux.Use(middleware.Timeout(20 * time.Second))
+
+	mux.Handle("/uploads/avatars/{avatar}.png", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		avatarID := chi.URLParam(r, "avatar")
+		avatarFile, err := os.Open(fmt.Sprintf("%s/uploads/avatars/%s.png", core.Config.StorageDIR, avatarID))
+		if err != nil {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+
+		if _, err := io.Copy(w, avatarFile); err != nil {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+
+	}))
 
 	mux.Route("/api", func(r chi.Router) {
 
@@ -63,7 +82,6 @@ func handler(core *core.Context) http.Handler {
 			r.Handle("/users.json", userHandler.HandleListUsers(core))
 			r.Handle("/roles.json", userHandler.HandleListRoles(core))
 			r.Handle("/pins.json", accessoryHandler.HandleListGPIOPins(core))
-			r.Handle("/health.json", systemHandler.HandleGetHealth(core))
 
 			r.Route("/users", func(r chi.Router) {
 				r.Handle("/me.json", userHandler.HandleUsersMe(core))
@@ -83,6 +101,7 @@ func handler(core *core.Context) http.Handler {
 			})
 
 		})
+
 	})
 
 	return mux

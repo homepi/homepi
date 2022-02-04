@@ -45,6 +45,7 @@ func createAccessory(ctx *core.Context) http.Handler {
 				User:        user,
 				UserID:      user.ID,
 				State:       rpio.Low,
+				IsActive:    true,
 			}
 		)
 
