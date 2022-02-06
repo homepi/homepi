@@ -20,12 +20,17 @@ func HandleHostInfo(ctx *core.Context) http.Handler {
 		switch r.Method {
 		case http.MethodGet:
 
-			scheme := "http"
-			if r.TLS != nil {
-				scheme = "https"
+			var baseURI string
+			if ctx.Config.Hostname != "" {
+				baseURI = ctx.Config.Hostname
+			} else {
+				scheme := "http"
+				if r.TLS != nil {
+					scheme = "https"
+				}
+				baseURI = fmt.Sprintf("%s://%s", scheme, r.Host)
 			}
 
-			baseURI := fmt.Sprintf("%s://%s", scheme, r.Host)
 			respond.NewWithWriter(w).Succeed(&ManifestType{
 				Version:        "v1",
 				BaseURI:        baseURI,
