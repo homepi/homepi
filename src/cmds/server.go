@@ -123,7 +123,7 @@ func apiServerCommand() *cobra.Command {
 	cmd.PersistentFlags().BoolVar(&cFlags.IgnoreArch, "ignore-arch", false, "Ignore arch error")
 	cmd.PersistentFlags().StringVarP(&cFlags.ConfigFile, "config-file", "c", "", "Server config file")
 	cmd.PersistentFlags().StringVar(&cFlags.LogOutputFilename, "log-file", "", "Log output filename")
-	cmd.PersistentFlags().BoolVar(&cFlags.TLS, "no-tls", false, "Start server without tls enabled")
+	cmd.PersistentFlags().BoolVar(&cFlags.TLS, "tls", false, "Start server without tls enabled")
 	cmd.PersistentFlags().StringVar(&cFlags.TLSCertFile, "tls-cert-file", "", "TLS Certificate file")
 	cmd.PersistentFlags().StringVar(&cFlags.TLSKeyFile, "tls-key-file", "", "TLS Key file")
 	return cmd
