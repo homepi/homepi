@@ -17,7 +17,7 @@ type Accessory struct {
 	PinID       uint64     `json:"pin_id,omitempty" form:"pin_id" validate:"required" gorm:"uniqueIndex"`
 	IsActive    bool       `json:"is_active,omitempty"`
 	IsPublic    bool       `json:"is_public,omitempty" form:"is_public" validate:"required"`
-	UserID      uint32     `json:"-"`
+	UserID      int64      `json:"-"`
 	User        *User      `gorm:"foreignkey:UserID" json:"-" validate:"-"`
 	State       rpio.State `json:"state,omitempty"`
 	CreatedAt   time.Time  `json:"created_at,omitempty"`

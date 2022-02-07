@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -16,7 +17,7 @@ type Webhook struct {
 	IsActive    bool       `json:"is_active" gorm:"default:true" form:"is_active"`
 	AccessoryID uint32     `json:"-" validate:"required" form:"accessory_id"`
 	Accessory   *Accessory `gorm:"foreignkey:AccessoryID" json:"accessory" validate:"-"`
-	UserID      uint32     `json:"-"`
+	UserID      int64      `json:"-"`
 	User        *User      `gorm:"foreignkey:UserID" json:"-" validate:"-"`
 	CreatedAt   time.Time  `json:"created_at"`
 	UpdatedAt   time.Time  `json:"updated_at"`
@@ -50,6 +51,7 @@ func GetWebhooks(db *gorm.DB, user *User, limit int) (webhooks []*Webhook, err e
 // creating random records for user like: stream_key, 2fa_auth_token, etc...
 func (wh *Webhook) BeforeCreate(db *gorm.DB) (err error) {
 	wh.ID = uuid.New().ID()
+	wh.Hash = fmt.Sprintf("%s-%s", libstr.RandomDigits(10), libstr.RandomLetters(40))
 	wh.CreatedAt = time.Now()
 	wh.UpdatedAt = time.Now()
 	return

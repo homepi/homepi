@@ -11,7 +11,7 @@ type Log struct {
 	ID          uint32     `gorm:"primary_key" json:"id"`
 	Read        bool       `json:"read,omitempty"`
 	Type        LogType    `json:"type"`
-	UserID      uint32     `json:"-"`
+	UserID      int64      `json:"-"`
 	User        User       `gorm:"foreignkey:UserID" json:"user"`
 	WebhookID   uint32     `json:"-"`
 	Webhook     *Webhook   `gorm:"foreignkey:WebhookID" json:"-"`

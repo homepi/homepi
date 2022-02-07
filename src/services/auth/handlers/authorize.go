@@ -32,7 +32,7 @@ func createAuthTokens(ctx *core.Context) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		var (
-			user    = &models.User{}
+			user    = new(models.User)
 			request = &models.Auth{
 				User: r.PostFormValue("user"),
 				Pass: r.PostFormValue("pass"),

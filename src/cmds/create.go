@@ -108,7 +108,7 @@ func createUserCommand(cFlags *CreateCommandFlags) *cobra.Command {
 			var (
 				password = libstr.RandomLetters(20)
 				user     = &models.User{
-					ID:       uuid.New().ID(),
+					ID:       int64(uuid.New().ID()),
 					Fullname: name,
 					Username: ccFlags.Username,
 					Email:    ccFlags.Email,

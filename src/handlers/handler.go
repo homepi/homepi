@@ -12,6 +12,7 @@ import (
 	"github.com/homepi/homepi/src/core"
 	"github.com/homepi/homepi/src/db"
 	accessoryHandler "github.com/homepi/homepi/src/services/accessory/handlers"
+	adminHandler "github.com/homepi/homepi/src/services/admin/handlers"
 	authHandler "github.com/homepi/homepi/src/services/auth/handlers"
 	systemHandler "github.com/homepi/homepi/src/services/system/handlers"
 	userHandler "github.com/homepi/homepi/src/services/user/handlers"
@@ -78,10 +79,13 @@ func handler(core *core.Context) http.Handler {
 		// version 1 routes
 		r.Route("/v1", func(r chi.Router) {
 
+			r.Route("/admin", func(r chi.Router) {
+				r.Handle("/users.json", adminHandler.HandleListUsers(core))
+				r.Handle("/roles.json", userHandler.HandleListRoles(core))
+				r.Handle("/pins.json", accessoryHandler.HandleListGPIOPins(core))
+			})
+
 			r.Handle("/auth/create.json", authHandler.HandleAuthTokens(core))
-			r.Handle("/users.json", userHandler.HandleListUsers(core))
-			r.Handle("/roles.json", userHandler.HandleListRoles(core))
-			r.Handle("/pins.json", accessoryHandler.HandleListGPIOPins(core))
 
 			r.Route("/users", func(r chi.Router) {
 				r.Handle("/me.json", userHandler.HandleUsersMe(core))
