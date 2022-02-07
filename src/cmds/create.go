@@ -3,6 +3,7 @@ package cmds
 import (
 	"fmt"
 
+	"github.com/google/uuid"
 	"github.com/homepi/homepi/pkg/libstr"
 	"github.com/homepi/homepi/src/core"
 	"github.com/homepi/homepi/src/db"
@@ -85,7 +86,7 @@ func createUserCommand(cFlags *CreateCommandFlags) *cobra.Command {
 				return fmt.Errorf("could not create database connection : %v", err)
 			}
 
-			var role *models.Role
+			role := new(models.Role)
 
 			if ccFlags.Role == "admin" {
 
@@ -107,6 +108,7 @@ func createUserCommand(cFlags *CreateCommandFlags) *cobra.Command {
 			var (
 				password = libstr.RandomLetters(20)
 				user     = &models.User{
+					ID:       uuid.New().ID(),
 					Fullname: name,
 					Username: ccFlags.Username,
 					Email:    ccFlags.Email,

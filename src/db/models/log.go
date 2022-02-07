@@ -39,44 +39,18 @@ const (
 	LogWebhook  LogType = 2
 )
 
-func (l *Log) LoadRelations(db *gorm.DB) {
-	db.Model(l).Association("User")
-	db.Model(l).Association("Accessory")
-	if l.Type == LogWebhook {
-		db.Model(l).Association("Webhook")
-		db.Model(l.Webhook).Association("User")
-	}
-}
-
-func GetLogs(db *gorm.DB, user *User, limit int) (logs []interface{}, err error) {
+func GetLogs(db *gorm.DB, user *User, limit int) (logs []*Log, err error) {
 
 	var (
-		dbLogs = make([]*Log, 0)
 		result = db.Where("user_id =?", user.ID).
 			Order("created_at desc").
 			Limit(limit).
-			Find(&dbLogs)
+			Preload("User").
+			Preload("Accessory").
+			Find(&logs)
 	)
 
-	if err = result.Error; err != nil {
-		return
-	}
-
-	for _, l := range dbLogs {
-		l.LoadRelations(db)
-		var resultLog interface{}
-		switch l.Type {
-		case LogWebhook:
-			resultLog = &LogWithWebhook{
-				Log:     l,
-				Webhook: l.Webhook,
-			}
-		default:
-			resultLog = l
-		}
-		logs = append(logs, resultLog)
-	}
-
+	err = result.Error
 	return
 }
 
