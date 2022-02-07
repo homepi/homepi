@@ -10,7 +10,7 @@ import (
 )
 
 type User struct {
-	ID        uint32    `gorm:"primary_key" json:"id"`
+	ID        int64     `gorm:"primary_key" json:"id"`
 	Fullname  string    `json:"fullname"  form:"fullname"  validate:"required"`
 	Username  string    `json:"username"  form:"username"  validate:"required" gorm:"uniqueIndex"`
 	Email     string    `json:"email"     form:"email"     validate:"required,email" gorm:"uniqueIndex"`
@@ -57,7 +57,7 @@ func (user *User) LoadRelations(db *gorm.DB) {
 
 // creating random records for user like: stream_key, 2fa_auth_token, etc...
 func (user *User) BeforeCreate(db *gorm.DB) error {
-	user.ID = uuid.New().ID()
+	user.ID = int64(uuid.New().ID())
 	user.Avatar = "default"
 	user.JoinedAt = time.Now()
 	user.LastLogin = time.Now()

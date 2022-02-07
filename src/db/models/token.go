@@ -12,7 +12,7 @@ type RefreshToken struct {
 	ID        uint32    `gorm:"primary_key" json:"id,omitempty"`
 	TokenID   string    `json:"token_id,omitempty" gorm:"uniqueIndex"`
 	Valid     bool      `json:"valid,omitempty" gorm:"default:true"`
-	UserID    uint32    `json:"-"`
+	UserID    int64     `json:"-"`
 	User      *User     `gorm:"foreignkey:UserID" json:"user,omitempty"`
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	ExpiresAt time.Time `json:"expires_at,omitempty"`
