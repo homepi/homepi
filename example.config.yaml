@@ -15,6 +15,9 @@ allowed_hosts:
   - 127.0.0.1
   - localhost
 
+allowed_headers:
+  - Authorization
+
 jwt:
   access_token:
     secret: "super-secure-jwt-access-token"

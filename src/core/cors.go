@@ -2,24 +2,25 @@ package core
 
 import (
 	"sync"
-	"sync/atomic"
 
 	"github.com/homepi/homepi/pkg/libstr"
 )
 
 const (
-	CORSDisabled uint32 = iota
-	CORSEnabled
+	CORSDisabled = false
+	CORSEnabled  = true
 )
 
 func (ctx *Context) CORSConfig() *CORSConfig {
 	return &CORSConfig{
-		Enabled: new(uint32),
+		Enabled:        CORSEnabled,
+		AllowedOrigins: ctx.Config.AllowedHosts,
+		AllowedHeaders: ctx.Config.AllowedHeaders,
 	}
 }
 
 type CORSConfig struct {
-	Enabled        *uint32  `json:"enabled"`
+	Enabled        bool     `json:"enabled"`
 	AllowedOrigins []string `json:"allowed_origins,omitempty"`
 	AllowedHeaders []string `json:"allowed_headers,omitempty"`
 	sync.RWMutex   `json:"-"`
@@ -27,7 +28,7 @@ type CORSConfig struct {
 
 // IsEnabled returns the value of CORSConfig.isEnabled
 func (c *CORSConfig) IsEnabled() bool {
-	return atomic.LoadUint32(c.Enabled) == CORSEnabled
+	return c.Enabled == CORSEnabled
 }
 
 // IsValidOrigin determines if the origin of the request is allowed to make
