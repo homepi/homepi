@@ -19,12 +19,17 @@ type Pins struct {
 }
 
 func (pin *Pin) Check(db *gorm.DB) (used bool, err error) {
-	accs := new(Accessory)
-	result := db.Where("pin_id =?", pin.ID).Find(accs)
-	if err := result.Error; err != nil {
+	if pin.ID == 0 {
+		return false, nil
+	}
+	var accCount int64
+	if err := db.Model(&Accessory{}).Where("pin_id =?", pin.ID).Count(&accCount).Error; err != nil {
 		return false, err
 	}
-	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return false, nil
+	}
+	if accCount == 0 {
 		return false, nil
 	}
 	return true, nil
