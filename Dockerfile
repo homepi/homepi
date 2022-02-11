@@ -14,7 +14,7 @@ ADD . /code
 WORKDIR /code
 
 # build project
-RUN go build -o homepi .
+RUN make
 
 FROM alpine AS app
 
