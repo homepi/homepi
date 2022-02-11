@@ -61,8 +61,8 @@ gox:
 
 # for ci jobs, runs lint against the changed packages in the commit
 .PHONY: ci-lint
-ci-lint:
-	@$(shell which golangci-lint) $(LINTERCMD) --deadline 10m ./...
+ci-lint: install-metalinter
+	@$(GOBIN)/golangci-lint $(LINTERCMD) --deadline 10m ./...
 
 # Check if golangci-lint not exists, then install it
 .PHONY: install-metalinter
