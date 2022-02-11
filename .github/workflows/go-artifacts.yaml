@@ -24,7 +24,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     outputs:
       version: ${{ steps.build.outputs.version }}
-      release: ${{ steps.build.outputs.release }}
     steps:
     - name: Install Go
       uses: actions/setup-go@v2
@@ -40,8 +39,7 @@ jobs:
       id: build
       run: |
         make build-artifacts
-        printf '::set-output name=version::%s\n' "$(./dist/homepi_linux_amd64 version | head -n 3)"
-        printf '::set-output name=release::%s\n' "$(./dist/homepi_linux_amd64 version | head -n 1)"
+        printf '::set-output name=version::%s\n' "$(./dist/homepi_linux_amd64 version | head -n 4)"
 
     - name: 'Upload macOS artifact'
       uses: actions/upload-artifact@v2
@@ -111,7 +109,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ env.TAG_NAME }}
-          name: ${{ needs.goartifacts.outputs.release }}
+          name: ${{ env.SUBJECT }}
           prerelease: ${{ env.TAG_NAME == 'master' }}
           commitish: ${{ github.sha }}
           gzip: false
@@ -124,7 +122,6 @@ jobs:
             homepi_linux_arm:./homepi_linux_arm/homepi_linux_arm
             homepi_linux_arm.sha256sum:./homepi_linux_arm.sha256sum
           body: |
-            ${{ env.SUBJECT }}
             ```
             ${{ needs.goartifacts.outputs.version }}
             ```
@@ -138,6 +135,7 @@ jobs:
             1. Download **homepi_linux_arm**
             2. Run `./homepi_linux_arm`
             ## SHA256 Checksums
+            
             ```
             ${{ env.SHA_LINUX_64 }}
             ${{ env.SHA_MACOS }}
