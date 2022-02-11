@@ -10,6 +10,14 @@ import (
 )
 
 type (
+	VersionInfo struct {
+		BranchName string
+		Version    string
+		GoVersion  string
+		CompiledBy string
+		BuildTime  string
+		BuildType  string
+	}
 	ConfMap struct {
 		Environment    string          `env:"HPI_ENVIRONMENT,default=development" yaml:"env"`
 		TimeZone       string          `env:"HPI_TIMEZONE,default=Asia/Tehran" yaml:"timezone"`
@@ -21,6 +29,7 @@ type (
 		StorageDIR     string          `yaml:"storage_dir"`
 		AllowedHosts   []string        `yaml:"allowed_hosts"`
 		AllowedHeaders []string        `yaml:"allowed_headers"`
+		VersionInfo    *VersionInfo    `yaml:"-"`
 	}
 
 	DatabaseConfMap struct {

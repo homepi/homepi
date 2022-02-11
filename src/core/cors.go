@@ -26,16 +26,11 @@ type CORSConfig struct {
 	sync.RWMutex   `json:"-"`
 }
 
-// IsEnabled returns the value of CORSConfig.isEnabled
-func (c *CORSConfig) IsEnabled() bool {
-	return c.Enabled == CORSEnabled
-}
-
 // IsValidOrigin determines if the origin of the request is allowed to make
 // cross-origin requests based on the CORSConfig.
 func (c *CORSConfig) IsValidOrigin(origin string) bool {
 	// If we aren't enabling CORS then all origins are valid
-	if !c.IsEnabled() {
+	if !c.Enabled {
 		return true
 	}
 

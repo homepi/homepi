@@ -50,7 +50,7 @@ func apiServerCommand() *cobra.Command {
 			if err != nil {
 				return err
 			}
-
+			cfg.VersionInfo = versionInfo
 			cfg.Port = cFlags.Port
 
 			logrus.SetFormatter(&logrus.TextFormatter{})

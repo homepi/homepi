@@ -9,10 +9,14 @@ import (
 	"github.com/mrjosh/respond.go"
 )
 
-type ManifestType struct {
+type SystemInfo struct {
 	OperatingSystem string `json:"operating_system"`
 	Arch            string `json:"arch"`
 	Version         string `json:"version"`
+	GoVersion       string `json:"go_version"`
+	CompiledBy      string `json:"compiled_by"`
+	BuildTime       string `json:"build_time"`
+	BuildType       string `json:"build_type"`
 	AvatarsPattern  string `json:"avatars_pattern"`
 	BaseURI         string `json:"base_uri"`
 	APIBaseURI      string `json:"api_base_uri"`
@@ -34,13 +38,17 @@ func HandleHostInfo(ctx *core.Context) http.Handler {
 				baseURI = fmt.Sprintf("%s://%s", scheme, r.Host)
 			}
 
-			respond.NewWithWriter(w).Succeed(&ManifestType{
+			respond.NewWithWriter(w).Succeed(&SystemInfo{
 				OperatingSystem: runtime.GOOS,
 				Arch:            runtime.GOARCH,
-				Version:         "v1",
+				Version:         ctx.Config.VersionInfo.Version,
+				BuildType:       ctx.Config.VersionInfo.BuildType,
 				BaseURI:         baseURI,
 				AvatarsPattern:  "/uploads/avatars/{avatar_name}.png",
 				APIBaseURI:      "/api/v1",
+				GoVersion:       ctx.Config.VersionInfo.GoVersion,
+				CompiledBy:      ctx.Config.VersionInfo.CompiledBy,
+				BuildTime:       ctx.Config.VersionInfo.BuildTime,
 			})
 			return
 

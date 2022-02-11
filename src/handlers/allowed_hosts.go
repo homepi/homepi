@@ -31,7 +31,6 @@ func wrapAllowedHosts(ctx *core.Context) func(next http.Handler) http.Handler {
 			}
 
 			w.WriteHeader(http.StatusForbidden)
-			return
 
 		})
 	}

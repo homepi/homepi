@@ -144,9 +144,6 @@ func createUserCommand(cFlags *CreateCommandFlags) *cobra.Command {
 		},
 	}
 
-	cmd.MarkPersistentFlagRequired("email")
-	cmd.MarkPersistentFlagRequired("username")
-
 	cmd.PersistentFlags().StringVarP(&ccFlags.Name, "name", "n", "", "user name")
 	cmd.PersistentFlags().StringVarP(&ccFlags.Email, "email", "e", "", "user email")
 	cmd.PersistentFlags().StringVarP(&ccFlags.Username, "username", "u", "", "user username")

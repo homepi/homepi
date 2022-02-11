@@ -6,6 +6,11 @@ export BUILD=cd $(ROOT) && $(GO) install -v -ldflags "-s"
 export CGO_ENABLED=1
 export GOX=$(BIN)/gox
 
+$(eval GIT_COMMIT = $(shell git rev-parse --short HEAD))
+$(eval BRANCH_NAME = $(shell git rev-parse --abbrev-ref HEAD))
+
+export GO_LDFLAGS="-X main.CompiledBy=runner@Mac-1640963667289.local -X main.Version=${GIT_COMMIT} -X main.BranchName=${BRANCH_NAME} -X main.BuildTime=`date -u '+%Y-%m-%d_%I:%M:%S%p'`"
+
 # Linter configurations
 export LINTER=$(GOBIN)/golangci-lint
 export LINTERCMD=run --no-config -v \
@@ -33,11 +38,11 @@ export LINTERCMD=run --no-config -v \
 
 # Build the project
 all:
-	$(BUILD) ./...
+	@$(GO) build -ldflags ${GO_LDFLAGS} -o bin/homepi .
 
 .PHONY: server
 server: all
-	$(ROOT)/bin/homepi server --config-file=$(ROOT)/config.yaml
+	@$(ROOT)/bin/homepi server --config-file=$(ROOT)/config.yaml
 
 # lint runs vet plus a number of other checkers, it is more comprehensive, but louder
 .PHONY: lint
@@ -57,13 +62,13 @@ gox:
 # for ci jobs, runs lint against the changed packages in the commit
 .PHONY: ci-lint
 ci-lint:
-	$(shell which golangci-lint) $(LINTERCMD) --deadline 10m ./...
+	@$(shell which golangci-lint) $(LINTERCMD) --deadline 10m ./...
 
 # Check if golangci-lint not exists, then install it
 .PHONY: install-metalinter
 install-metalinter:
-	$(GO) get -v github.com/golangci/golangci-lint/cmd/golangci-lint@v1.41.1
-	$(GO) install -v github.com/golangci/golangci-lint/cmd/golangci-lint@v1.41.1
+	@$(GO) get -v github.com/golangci/golangci-lint/cmd/golangci-lint@v1.41.1
+	@$(GO) install -v github.com/golangci/golangci-lint/cmd/golangci-lint@v1.41.1
 
 # Run tests
 .PHONY: test
@@ -75,12 +80,12 @@ install-gox:
 
 .PHONY: build-linux
 build-linux: install-gox
-	@$(GOX) --arch=amd64 --os=linux --output="dist/homepi_{{.OS}}_{{.Arch}}"
-	@$(GOX) --arch=arm --os=linux --output="dist/homepi_{{.OS}}_{{.Arch}}"
+	@$(GOX) -ldflags ${GO_LDFLAGS} --arch=amd64 --os=linux --output="dist/homepi_{{.OS}}_{{.Arch}}"
+	@$(GOX) -ldflags ${GO_LDFLAGS} --arch=arm --os=linux --output="dist/homepi_{{.OS}}_{{.Arch}}"
 
 .PHONY: build-macOS
 build-macOS: install-gox
-	@$(GOX) --arch=amd64 --os=darwin --output="dist/homepi_{{.OS}}_{{.Arch}}"
+	@$(GOX) -ldflags ${GO_LDFLAGS} --arch=amd64 --os=darwin --output="dist/homepi_{{.OS}}_{{.Arch}}"
 
 .PHONY: build-artifacts
 build-artifacts:
