@@ -6,10 +6,10 @@ on:
       tag_name:
         description: 'Tag name for release'
         required: false
-        default: develop
+        default: master
   push:
     branches:
-      - develop
+      - master
     tags:
       - v*
 
@@ -79,7 +79,7 @@ jobs:
         run: echo "TAG_NAME=${{ github.event.inputs.tag_name }}" >> $GITHUB_ENV
 
       - if: github.event_name == 'schedule'
-        run: echo 'TAG_NAME=develop' >> $GITHUB_ENV
+        run: echo 'TAG_NAME=master' >> $GITHUB_ENV
 
       - if: github.event_name == 'push'
         run: |
@@ -101,10 +101,10 @@ jobs:
           sha256sum homepi_linux_arm/homepi_linux_arm > homepi_linux_arm.sha256sum
           echo "SHA_LINUX_ARM=$(cat homepi_linux_arm.sha256sum)" >> $GITHUB_ENV
 
-      - if: env.TAG_NAME == 'develop'
+      - if: env.TAG_NAME == 'master'
         run: echo 'SUBJECT=HomePi development (prerelease) build' >> $GITHUB_ENV
 
-      - if: env.TAG_NAME != 'develop'
+      - if: env.TAG_NAME != 'master'
         run: echo 'SUBJECT=HomePi release build' >> $GITHUB_ENV
 
       - uses: meeDamian/github-release@2.0
@@ -112,7 +112,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ env.TAG_NAME }}
           name: ${{ needs.goartifacts.outputs.release }}
-          prerelease: ${{ env.TAG_NAME == 'develop' }}
+          prerelease: ${{ env.TAG_NAME == 'master' }}
           commitish: ${{ github.sha }}
           gzip: false
           allow_override: true
