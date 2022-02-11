@@ -1,26 +1,18 @@
 package cmds
 
 import (
+	"github.com/homepi/homepi/src/core"
 	"github.com/spf13/cobra"
 )
 
-func Run(args []string) error {
+var versionInfo *core.VersionInfo
 
-	rootCmd := &cobra.Command{
-		Use:     "homepi",
-		Version: "v0.0.1",
-		Long: `
-    __  __                     ____  _ 
-   / / / /___  ________  ___  / __ \(_)
-  / /_/ / __ \/ __  __ \/ _ \/ /_/ / / 
- / __  / /_/ / / / / / /  __/ ____/ /  
-/_/ /_/\____/_/ /_/ /_/\___/_/   /_/`,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return cmd.Help()
-		},
+func RegisterAndRun(vi *core.VersionInfo, rootCmd *cobra.Command) error {
+	vi.BuildType = "Release"
+	if vi.BranchName == "develop" {
+		vi.BuildType = "Nightly"
 	}
-
-	rootCmd.SetArgs(args)
+	versionInfo = vi
 	rootCmd.AddCommand(versionCommand())
 	rootCmd.AddCommand(apiServerCommand())
 	rootCmd.AddCommand(initCommand())
@@ -28,6 +20,5 @@ func Run(args []string) error {
 	rootCmd.AddCommand(createCommand())
 	rootCmd.AddCommand(deleteCommand())
 	rootCmd.AddCommand(runAccessoryCommand())
-
 	return rootCmd.Execute()
 }
