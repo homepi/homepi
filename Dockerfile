@@ -18,7 +18,7 @@ RUN make
 
 FROM alpine AS app
 
-COPY --from=builder /code/homepi /usr/bin/homepi
+COPY --from=builder /code/bin/homepi /usr/bin/homepi
 
 EXPOSE 55283
 
