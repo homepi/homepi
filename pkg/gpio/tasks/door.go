@@ -11,17 +11,19 @@ type Door struct {
 	Accessory *models.Accessory
 }
 
-// Run door accessory
+// Run door accessory.
 func (d *Door) Run(pin rpio.Pin) error {
-
 	// Set pin as output
 	pin.Output()
 
 	// Turn on the pin!
 	pin.Low()
 
-	// Turn off the pin after 1 second!
-	time.AfterFunc(time.Second, pin.High)
+	// Sleep 1 second before turning off the pin
+	time.Sleep(time.Second)
+
+	// Turn off the pin
+	pin.High()
 
 	return nil
 }
